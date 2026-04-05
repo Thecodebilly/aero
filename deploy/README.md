@@ -80,6 +80,35 @@ Examples / reference-only:
 The header values are centralized in `scripts/headers.json` (exported via `scripts/security_headers.mjs`).
 CI enforces consistency via `scripts/ci/check-security-headers.mjs`.
 
+## Railway (single service: frontend + gateway)
+
+This repo now includes a root `railway.toml` so Railway can build and run Aero as a
+single Node service:
+
+- build: install dependencies, build the Vite frontend (`./dist`), then build `backend/aero-gateway`
+- start: run `backend/aero-gateway` (`node dist/index.js`)
+- health check: `GET /healthz`
+
+Deploy steps:
+
+1. Create a new Railway project from this repo.
+2. Ensure the service root is the repository root (default).
+3. Set required env vars (at minimum):
+   - `PORT` (Railway injects this automatically)
+   - `PUBLIC_BASE_URL=https://<your-railway-domain>`
+   - `SESSION_SECRET=<strong-random-secret>`
+4. Optional but recommended:
+   - `CROSS_ORIGIN_ISOLATION=1`
+   - `TRUST_PROXY=1` (Railway terminates TLS before your service)
+   - `ALLOWED_ORIGINS=https://<your-railway-domain>`
+
+Notes:
+
+- `backend/aero-gateway` auto-serves static files when `./dist` exists, so one Railway
+  service can host both the browser app and gateway APIs.
+- If you deploy a custom domain, update `PUBLIC_BASE_URL` and `ALLOWED_ORIGINS` to the
+  final HTTPS origin.
+
 ## CI validation (Terraform + Helm)
 
 CI validates the deployment artifacts under:
