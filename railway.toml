@@ -1,6 +1,6 @@
 [build]
 builder = "NIXPACKS"
-buildCommand = "npm ci && npm run build && npm -w backend/aero-gateway run build"
+buildCommand = "npm ci --include=dev --include-workspace-root --workspace backend/aero-gateway --workspace web --no-audit --no-fund && npm run build && npm -w backend/aero-gateway run build"
 
 [deploy]
 startCommand = "npm -w backend/aero-gateway run start"

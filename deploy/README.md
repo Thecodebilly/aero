@@ -97,6 +97,8 @@ Deploy steps:
    - `PORT` (Railway injects this automatically)
    - `PUBLIC_BASE_URL=https://<your-railway-domain>`
    - `SESSION_SECRET=<strong-random-secret>`
+   - `NPM_CONFIG_PRODUCTION=false` (ensures build-time dev tools like `vite` are installed during `npm ci`)
+   - `NIXPACKS_NODE_VERSION=22.11.0` (matches `.nvmrc` / CI baseline)
 4. Optional but recommended:
    - `CROSS_ORIGIN_ISOLATION=1`
    - `TRUST_PROXY=1` (Railway terminates TLS before your service)
@@ -108,6 +110,9 @@ Notes:
   service can host both the browser app and gateway APIs.
 - If you deploy a custom domain, update `PUBLIC_BASE_URL` and `ALLOWED_ORIGINS` to the
   final HTTPS origin.
+- For browser Windows 7 networking beyond local/demo flows, configure a reachable
+  L2 proxy and UDP relay (`L2_PROXY_BASE_URL`, `UDP_RELAY_BASE_URL`) so guest TCP/UDP
+  traffic can leave the VM.
 
 ## CI validation (Terraform + Helm)
 
